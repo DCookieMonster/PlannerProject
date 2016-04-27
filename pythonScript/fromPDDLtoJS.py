@@ -35,11 +35,17 @@ def main():
     s=re.split('_|-',tiles[len(tiles)-1])
     height=int(s[1])+1
     width=int(s[2])
-    tiles_js=[]
+    tiles_tmp=[]
 
     for i in range(0,height):
         for j in range(0,width):
-                tiles_js.append(["white",str(j)+'*widthTileSize',str(i)+"*heightTileSize"])
+                tiles_tmp.append(["white",str(j)+'*widthTileSize',str(i)+"*heightTileSize"])
+    tiles_js="[ "
+    for tile in tiles_tmp:
+        tiles_js+="['"+str(tile[0])+"', "+str(tile[1])+", "+str(tile[2])+"],"
+
+    tiles_js=tiles_js[:len(tiles_js)-1]+"]"
+
     colors=d["color"]
     robots={}
     for robot in d["robot"]:
@@ -49,17 +55,61 @@ def main():
         if (len(pre)>=3 and "robot" in pre[1]):
             if(pre[0]=='robot-at'):
                 s=re.split('_|-',pre[2])
-                robots[pre[1]].append({'x':s[1],'y':s[2]})
+                robots[pre[1]].append({'x':str(int(s[2])-1),'y':s[1]})
             if(pre[0]=='robot-has'):
                 robots[pre[1]].append({'color':pre[2]})
 
     robots_js="[ "
     for robot in robots:
         robots_js+="{x:"+str(robots[robot][0]['x'])+"*widthTileSize, "
-        robots_js+="y:"+str(robots[robot][0]['y'])+"*heightTileSize, "
+        robots_js+="y:"+str(int(robots[robot][0]['y']))+"*heightTileSize, "
         robots_js+="color:"+str(colors.index(robots[robot][1]['color']))+"},"
     robots_js=robots_js[:len(robots_js)-1]+"]"
-    print()
+
+    goal_tmp=[]
+    small_goal_tmp=[]
+    for i in range(0,width):
+        goal_tmp.append(["white",str(i)+'*widthTileSize',str(0)+"*heightTileSize"])
+        small_goal_tmp.append(["white",str(i)+'*goalWidthTileSize',str(0)+"*goalHeightTileSize"])
+
+    for goal in domprob.problem.goals:
+        pre=goal.predicate
+        s=re.split('_|-',pre[1])
+        goal_tmp.append([pre[2],str(int(s[2])-1)+'*widthTileSize',str(s[1])+"*heightTileSize"])
+        small_goal_tmp.append([pre[2],str(int(s[2])-1)+'*goalWidthTileSize',str(s[1])+"*goalHeightTileSize"])
+
+    color_js="[ "
+    for color in colors:
+        color_js+="\""+color+"\","
+    color_js=color_js[:len(color_js)-1]+"]"
+
+
+
+    goal_js="[ "
+    for tile in goal_tmp:
+        goal_js+="['"+str(tile[0])+"', "+str(tile[1])+", "+str(tile[2])+"],"
+
+    goal_js=goal_js[:len(goal_js)-1]+"]"
+
+    small_goal_js="["
+
+    for tile in small_goal_tmp:
+        small_goal_js+="['"+str(tile[0])+"', "+str(tile[1])+", "+str(tile[2])+"],"
+    small_goal_js=small_goal_js[:len(small_goal_js)-1]+"]"
+
+
+
+    var = "var g = document.getElementById('goal');\nvar gctx = g.getContext('2d');\n" \
+            "var goalHeightTileSize = g.offsetHeight /"+str(height) +";\nvar goalWidthTileSize = g.offsetWidth/"+str(width)+";\n" \
+            "var goal_tiles = "+small_goal_js+";\n"\
+          "var canvas = document.getElementById('board');\nvar ctx = canvas.getContext('2d');\n" \
+          "var heightTileSize = canvas.offsetHeight /"+str(height) +";\nvar widthTileSize = canvas.offsetWidth/"+str(width)+";" \
+        "\nvar tiles = "+tiles_js+"; \nvar robot="+robots_js+"; \nvar colors = "+color_js+"; \nvar result_tiles = "+goal_js+"; \n"
+
+    print(var)
+
+    with open("variable.js", "wt") as out_file:
+        out_file.write(var)
 
 if __name__ == '__main__':
     main()

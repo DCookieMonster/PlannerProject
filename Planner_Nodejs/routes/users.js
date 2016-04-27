@@ -48,11 +48,11 @@ router.post('/json', function (req, res) {
             var user1 = {name: 'modulus admin', age: 42, roles: ['admin', 'moderator', 'user']};
 
             // Insert some users
-            collection.insert([req.body], function (err, result) {
+            collection.insert(req.body, function (err, result) {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log('Inserted %d documents into the "planner" collection. The documents inserted with "_id" are:', result.length, result);
+                    //console.log('Inserted %d documents into the "planner" collection. The documents inserted with "_id" are:', result.length, result);
                 }
                 //Close connection
                 db.close();

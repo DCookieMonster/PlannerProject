@@ -29,8 +29,28 @@ app.controller("demoCtrl", ["$scope", "$rootScope",
     }]);
 
 
-app.controller("endCtrl", ["$scope", "$rootScope",
-    function ($scope, $rootScope) {
+app.controller("endCtrl", ["$scope", "$rootScope", "$http",
+    function ($scope, $rootScope, $http) {
+        var data = $.param({
+            user: "dor"
+        });
+
+        $scope.init = function () {
+
+            $http({
+                method: 'POST',
+                url: 'http://localhost:3000/users/json',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param($rootScope.user)
+            }).success(function (data) {
+                console.log("posted successfully");
+            }).error(function (data) {
+                console.error["error in posting"];
+            })
+        };
+        $scope.init();
+
+
 
 
     }]);
@@ -164,7 +184,6 @@ app.controller("expCtrl", ["$scope", "$rootScope", '$timeout',
                 $scope.$apply();
             }
         };
-
 
         $scope.continue = function () {
             if ($scope.index >= $scope.activeState.length - 1) {

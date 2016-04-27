@@ -5,16 +5,16 @@
            tile_2-1 tile_2-2 tile_2-3 
            tile_3-1 tile_3-2 tile_3-3 - tile
            robot1 robot2 - robot
-           red black - color
+           red blue - color
 )
  (:init 
    (= (total-cost) 0)
    (robot-at robot1 tile_0-1)
    (robot-has robot1 red)
    (robot-at robot2 tile_2-2)
-   (robot-has robot2 black)
+   (robot-has robot2 blue)
    (available-color red)
-   (available-color black)
+   (available-color blue)
    (clear tile_0-2)
    (clear tile_0-3)
    (clear tile_1-1)
@@ -61,14 +61,15 @@
    (left tile_3-2 tile_3-3)
 )
  (:goal (and
+    (painted tile_2-1 blue)
     (painted tile_1-1 red)
-    (painted tile_1-2 black)
+    (painted tile_1-2 blue)
     (painted tile_1-3 red)
-    (painted tile_2-1 black)
+    (painted tile_2-1 blue)
     (painted tile_2-2 red)
-    (painted tile_2-3 black)
+    (painted tile_2-3 blue)
     (painted tile_3-1 red)
-    (painted tile_3-2 black)
+    (painted tile_3-2 blue)
     (painted tile_3-3 red)
 ))
  (:metric minimize (total-cost))

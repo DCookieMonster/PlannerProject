@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$/Planner_Nodejs">
+    <envs>
+      <env name="DEBUG" value="Planner_Nodejs:*" />
+      <env name="" value="" />
+    </envs>
+    <method />
+  </configuration>
+</component>

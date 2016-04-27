@@ -6,63 +6,35 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
 
         $scope.userMoves = [];
 
-
-        var canvas = document.getElementById("board");
-        var ctx = canvas.getContext("2d");
+        var offset = 0;
 
 
         $scope.initGoal = function () {
-            var g = document.getElementById("goal");
-            var gctx = g.getContext("2d");
-            var tileSize2 = g.offsetHeight / 3;
-            var goal_tiles = [["blue", 0, 0], ["red", 0, tileSize2], ["blue", 0, 2 * tileSize2],
-                ["red", tileSize2, 0], ["blue", tileSize2, tileSize2], ["red", tileSize2, 2 * tileSize2],
-                ["blue", 2 * tileSize2, 0], ["red", 2 * tileSize2, tileSize2], ["blue", 2 * tileSize2, 2 * tileSize2]
-            ];
+            //var g = document.getElementById("goal");
+            //var gctx = g.getContext("2d");
+            //var tileSize2 = g.offsetHeight / 3;
+            //var goal_tiles = [["blue", 0, 0], ["red", 0, tileSize2], ["blue", 0, 2 * tileSize2],
+            //    ["red", tileSize2, 0], ["blue", tileSize2, tileSize2], ["red", tileSize2, 2 * tileSize2],
+            //    ["blue", 2 * tileSize2, 0], ["red", 2 * tileSize2, tileSize2], ["blue", 2 * tileSize2, 2 * tileSize2]
+            //];
             for (var i = 0; i < goal_tiles.length; i++) {
                 gctx.beginPath();
                 gctx.fillStyle = goal_tiles[i][0];
-                gctx.rect(goal_tiles[i][1], goal_tiles[i][2], tileSize2, tileSize2);
+                gctx.rect(goal_tiles[i][1] + 1, goal_tiles[i][2] + 1, goalWidthTileSize - 2, goalHeightTileSize - 1);
                 gctx.stroke();
                 gctx.fill();
             }
 
-        }
+        };
 
         $scope.score = 0;
 
-        var tileSize = canvas.offsetHeight / 3;
 
-        var offset = 0;
-        var robot = [
-            {
-                x: offset,
-                y: 0,
-                color: 0
-            }
-            , {
-                x: tileSize + offset,
-                y: tileSize,
-                color: 1
-            }
-        ];
         var activeRobot = 0;
 // Handle keyboard controls
         var keysDown = {};
 //
 
-        var colors = ["blue", "red"];
-//var activeColor=0;
-
-        var tiles = [["white", 0, 0], ["white", 0, tileSize], ["white", 0, 2 * tileSize],
-            ["white", tileSize, 0], ["white", tileSize, tileSize], ["white", tileSize, 2 * tileSize],
-            ["white", 2 * tileSize, 0], ["white", 2 * tileSize, tileSize], ["white", 2 * tileSize, 2 * tileSize]
-        ];
-
-        var result_tiles = [["blue", 0, 0], ["red", 0, tileSize], ["blue", 0, 2 * tileSize],
-            ["red", tileSize, 0], ["blue", tileSize, tileSize], ["red", tileSize, 2 * tileSize],
-            ["blue", 2 * tileSize, 0], ["red", 2 * tileSize, tileSize], ["blue", 2 * tileSize, 2 * tileSize]
-        ];
 
 
         var states = [{
@@ -77,7 +49,7 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
             for (var i = 0; i < tiles.length; i++) {
                 ctx.beginPath();
                 ctx.fillStyle = tiles[i][0];
-                ctx.rect(tiles[i][1], tiles[i][2], tileSize, tileSize);
+                ctx.rect(tiles[i][1], tiles[i][2], widthTileSize, heightTileSize);
                 ctx.stroke();
                 ctx.fill();
             }
@@ -88,7 +60,7 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
         window.addEventListener("keydown", function (e) {
             //console.log(e.keyCode)
             keysDown[e.keyCode] = true;
-            $scope.update(tileSize);
+            $scope.update(widthTileSize, heightTileSize);
             $scope.render();
             // space and arrow keys
             if ([32, 37, 38, 39, 40, 83, 87, 67, 88].indexOf(e.keyCode) > -1) {
@@ -136,7 +108,7 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
 
         $scope.checkIfFree = function (x, y) {
             for (var i = 0; i < robot.length; i++) {
-                if (robot[i].x == x && robot[i].y == y) {
+                if (parseInt(robot[i].x) == parseInt(x) && parseInt(robot[i].y) == parseInt(y)) {
                     return true;
                 }
             }
@@ -144,51 +116,51 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
         };
 
 //Update game objects
-        $scope.update = function (modifier) {
+        $scope.update = function (width_mod, height_mod) {
             if (38 in keysDown) { // Player holding up
-                if (robot[activeRobot].y - modifier < 0) {
+                if (robot[activeRobot].y - height_mod < 0) {
                     return;
                 }
-                if ($scope.checkIfFree(robot[activeRobot].x, robot[activeRobot].y - modifier)) {
+                if ($scope.checkIfFree(robot[activeRobot].x, robot[activeRobot].y - height_mod)) {
                     return;
                 }
-                robot[activeRobot].y -= modifier;
-                $scope.score += 3;
+                robot[activeRobot].y -= height_mod;
+                $scope.score += 1;
                 $scope.userMoves.push("Up")
             }
             if (40 in keysDown) { // Player holding down
-                if (robot[activeRobot].y + modifier >= canvas.offsetWidth) {
+                if (robot[activeRobot].y + height_mod >= canvas.offsetHeight) {
                     return;
                 }
-                if ($scope.checkIfFree(robot[activeRobot].x, robot[activeRobot].y + modifier)) {
+                if ($scope.checkIfFree(robot[activeRobot].x, robot[activeRobot].y + height_mod)) {
                     return;
                 }
-                robot[activeRobot].y += modifier;
-                $scope.score += 1;
+                robot[activeRobot].y += height_mod;
+                $scope.score += 3;
                 $scope.userMoves.push("Down")
 
 
             }
             if (37 in keysDown) { // Player holding left
-                if (robot[activeRobot].x - modifier < 0 + offset) {
+                if (robot[activeRobot].x - width_mod < 0 + offset) {
                     return;
                 }
-                if ($scope.checkIfFree(robot[activeRobot].x - modifier, robot[activeRobot].y)) {
+                if ($scope.checkIfFree(robot[activeRobot].x - width_mod, robot[activeRobot].y)) {
                     return;
                 }
-                robot[activeRobot].x -= modifier;
+                robot[activeRobot].x -= width_mod;
                 $scope.score += 1;
                 $scope.userMoves.push("Left")
 
             }
             if (39 in keysDown) { // Player holding right
-                if (robot[activeRobot].x + modifier >= canvas.offsetWidth + offset) {
+                if (robot[activeRobot].x + width_mod >= canvas.offsetWidth + offset) {
                     return;
                 }
-                if ($scope.checkIfFree(robot[activeRobot].x + modifier, robot[activeRobot].y)) {
+                if ($scope.checkIfFree(robot[activeRobot].x + width_mod, robot[activeRobot].y)) {
                     return;
                 }
-                robot[activeRobot].x += modifier;
+                robot[activeRobot].x += width_mod;
                 $scope.score += 1;
                 $scope.userMoves.push("Right")
 
@@ -196,10 +168,10 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
             }
             if (83 in keysDown) {
                 console.log("s")
-                $scope.score += 1;
+                $scope.score += 2;
 
                 for (var i = 0; i < tiles.length; i++) {
-                    if (robot[activeRobot].x == tiles[i][1] && robot[activeRobot].y + tileSize == tiles[i][2]) {
+                    if (robot[activeRobot].x == tiles[i][1] && robot[activeRobot].y + height_mod == tiles[i][2]) {
                         tiles[i][0] = colors[robot[activeRobot].color];
                     }
                 }
@@ -213,9 +185,9 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
             }
             if (87 in keysDown) {
                 console.log("w")
-                $scope.score += 1;
+                $scope.score += 2;
                 for (var i = 0; i < tiles.length; i++) {
-                    if (robot[activeRobot].x == tiles[i][1] && robot[activeRobot].y - tileSize == tiles[i][2]) {
+                    if (robot[activeRobot].x == tiles[i][1] && robot[activeRobot].y - height_mod == tiles[i][2]) {
                         tiles[i][0] = colors[robot[activeRobot].color];
                     }
                 }
@@ -289,16 +261,16 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
             if (heroReady) {
                 for (var i = 0; i < robot.length; i++) {
                     if (i == activeRobot) {
-                        ctx.drawImage(activeRobotimg, robot[i].x, robot[i].y, activeRobotimg.width, activeRobotimg.height);
+                        ctx.drawImage(activeRobotimg, robot[i].x, robot[i].y, widthTileSize, heightTileSize);
 
                     }
                     else {
-                        ctx.drawImage(heroImage, robot[i].x, robot[i].y, heroImage.width, heroImage.height);
+                        ctx.drawImage(heroImage, robot[i].x, robot[i].y, widthTileSize, heightTileSize);
 
                     }
                     ctx.beginPath();
                     ctx.fillStyle = colors[robot[i].color];
-                    ctx.rect(robot[i].x + heroImage.width / 2 - 15, robot[i].y + 3 * heroImage.height / 4 - 10, 30, 30);
+                    ctx.rect(robot[i].x + widthTileSize / 2 - 15, robot[i].y + 3 * heightTileSize / 4 - 10, 25, 25);
                     ctx.stroke();
                     ctx.fill();
 
@@ -349,7 +321,7 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
 
         $scope.countdown = function () {
             stopped = $timeout(function () {
-                console.log($scope.counter);
+                //console.log($scope.counter);
                 if ($scope.counter === 0) {
                     //TODO: Alert
                     alert("Time is Up");
