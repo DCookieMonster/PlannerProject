@@ -47,6 +47,7 @@ app.controller("endCtrl", ["$scope", "$rootScope", "$http",
         $scope.init = function () {
             $rootScope.user["userId"] = $scope.randString(10);
             $scope.userCode = $rootScope.user["userId"];
+
             $http({
                 method: 'POST',
                 url: 'http://localhost:3000/users/json',
@@ -145,22 +146,22 @@ app.controller("expCtrl", ["$scope", "$rootScope", '$timeout',
 
         //$scope.userInfo=$rootScope.userInfo;
         $scope.start = {
-            'up': 0,
-            'down': 0,
-            'right': 0,
-            'left': 0
+            up: 0,
+            down: 0,
+            right: 0,
+            left: 0
         };
         $scope.middle = {
-            'up': 0,
-            'down': 0,
-            'right': 0,
-            'left': 0
+            up: 0,
+            down: 0,
+            right: 0,
+            left: 0
         };
         $scope.end = {
-            'up': 0,
-            'down': 0,
-            'right': 0,
-            'left': 0
+            up: 0,
+            down: 0,
+            right: 0,
+            left: 0
         };
 
         $scope.counter = 300;
@@ -175,10 +176,10 @@ app.controller("expCtrl", ["$scope", "$rootScope", '$timeout',
         ];
 
         $scope.init = function () {
-            var i = Math.floor(Math.random() * 7);
+            var i = Math.floor(Math.random() * 6);
             console.log("the index is:" + i);
             if (i < 0 || i > 6) {
-                i = 6;
+                i = 5;
             }
             $scope.activeState = $scope.states[i];
             $scope.index = 0;
@@ -232,6 +233,7 @@ app.controller("expCtrl", ["$scope", "$rootScope", '$timeout',
                 $(".pic").hide();
 
                 $("#" + $scope.activeState[$scope.index]).show();
+                document.body.scrollTop = document.documentElement.scrollTop = 0;
                 $scope.counter = 300;
 
                 $scope.countdown();

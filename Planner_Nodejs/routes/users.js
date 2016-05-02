@@ -48,8 +48,11 @@ router.post('/json', function (req, res) {
             collection.insert(req.body, function (err, result) {
                 if (err) {
                     console.log(err);
+                    res.json({result: "error"})
                 } else {
                     //console.log('Inserted %d documents into the "planner" collection. The documents inserted with "_id" are:', result.length, result);
+                    res.json({result: "OK"})
+
                 }
                 //Close connection
                 db.close();
