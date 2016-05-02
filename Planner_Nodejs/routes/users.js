@@ -3,10 +3,7 @@ var router = express.Router();
 var http = require('http');
 var request = require("request");
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-    //res.send('respond with a resource');
-    res.json(quotes);
-});
+
 
 
 //lets require/import the mongodb native drivers.
@@ -60,5 +57,35 @@ router.post('/json', function (req, res) {
         }
     });
 });
+
+
+router.get('/all', function (req, res, next) {
+    //res.send('respond with a resource');
+    MongoClient.connect(url, function (err, db) {
+        if (err) {
+            console.log('Unable to connect to the mongoDB server. Error:', err);
+        } else {
+            //HURRAY!! We are connected. :)
+            console.log('Connection established to', url);
+
+            // Get the documents collection
+            var collection = db.collection('logger');
+
+
+            // Insert some users
+            collection.find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    //console.log('Inserted %d documents into the "planner" collection. The documents inserted with "_id" are:', result.length, result);
+                    res.json(result)
+                }
+                //Close connection
+                db.close();
+            });
+        }
+    });
+});
+
 
 module.exports = router;

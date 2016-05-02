@@ -31,12 +31,22 @@ app.controller("demoCtrl", ["$scope", "$rootScope",
 
 app.controller("endCtrl", ["$scope", "$rootScope", "$http",
     function ($scope, $rootScope, $http) {
-        var data = $.param({
-            user: "dor"
-        });
+        $scope.randString = function (x) {
+
+            var text = "";
+            var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (var i = 0; i < x; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+
+        };
+
 
         $scope.init = function () {
-
+            $rootScope.user["userId"] = $scope.randString(10);
+            $scope.userCode = $rootScope.user["userId"];
             $http({
                 method: 'POST',
                 url: 'http://localhost:3000/users/json',
@@ -71,7 +81,27 @@ app.controller("insCtrl", ["$scope", "$rootScope",
         //$scope.userInfo=$rootScope.userInfo;
         $scope.continue = function () {
             $rootScope.user["DurationInstruction"] = new Date - start;
+            $rootScope.user["NumberOfTimeInQuiz"] = $rootScope.numberOftimeInQuiz
             $scope.changeRoute('#/quiz');
+        }
+    }]);
+
+
+app.controller("consentCtrl", ["$scope", "$rootScope",
+    function ($scope, $rootScope) {
+        $scope.changeRoute = function (url, forceReload) {
+            $scope = $scope || angular.element(document).scope();
+            if (forceReload || $scope.$$phase) { // that's right TWO dollar signs: $$phase
+                window.location = url;
+            } else {
+                $location.path(url);
+                $scope.$apply();
+            }
+        };
+
+        //$scope.userInfo=$rootScope.userInfo;
+        $scope.continue = function () {
+            $scope.changeRoute('#/demographics');
         }
     }]);
 
@@ -189,6 +219,9 @@ app.controller("expCtrl", ["$scope", "$rootScope", '$timeout',
             if ($scope.index >= $scope.activeState.length - 1) {
                 // move to end of expeirment
                 $timeout.cancel(stopped);
+                $rootScope.user['start'] = $scope.start;
+                $rootScope.user['middle'] = $scope.middle;
+                $rootScope.user['end'] = $scope.end;
                 $scope.changeRoute('#/end');
 
             }

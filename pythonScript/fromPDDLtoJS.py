@@ -24,7 +24,7 @@ import re
 def main():
     # demonumber = int(argv[1])
     domainfile = "domain.pddl"
-    problemfile = "opt-p01-001.pddl"
+    problemfile = "opt-p08-016.pddl"
     domprob = DomainProblem(domainfile, problemfile)
 
     d = defaultdict(list)

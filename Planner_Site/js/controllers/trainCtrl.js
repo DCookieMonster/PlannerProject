@@ -168,38 +168,42 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
             }
             if (83 in keysDown) {
                 console.log("s")
-                $scope.score += 2;
+
 
                 for (var i = 0; i < tiles.length; i++) {
-                    if (robot[activeRobot].x == tiles[i][1] && robot[activeRobot].y + height_mod == tiles[i][2]) {
+                    if (parseInt(robot[activeRobot].x) == parseInt(tiles[i][1]) && (parseInt(robot[activeRobot].y + height_mod) == parseInt(tiles[i][2]) || parseInt(robot[activeRobot].y + height_mod) == parseInt(tiles[i][2]) + 1 || parseInt(robot[activeRobot].y + height_mod) == parseInt(tiles[i][2]) - 1)) {
                         tiles[i][0] = colors[robot[activeRobot].color];
+                        $scope.score += 2;
+                        $scope.userMoves.push("Color Down");
+                        if (checkGoal()) {
+                            //TODO:win
+                            alert("you win");
+                            $scope.win = true;
+                        }
                     }
                 }
-                $scope.userMoves.push("Color Down");
 
-                if (checkGoal()) {
-                    //TODO:win
-                    alert("you win");
-                    $scope.win = true;
-                }
+
             }
             if (87 in keysDown) {
                 console.log("w")
-                $scope.score += 2;
                 for (var i = 0; i < tiles.length; i++) {
-                    if (robot[activeRobot].x == tiles[i][1] && robot[activeRobot].y - height_mod == tiles[i][2]) {
+                    if (parseInt(robot[activeRobot].x) == parseInt(tiles[i][1]) && (parseInt(robot[activeRobot].y) - parseInt(height_mod) == parseInt(tiles[i][2]) || parseInt(robot[activeRobot].y) - parseInt(height_mod) == parseInt(tiles[i][2]) + 1 || parseInt(robot[activeRobot].y) - parseInt(height_mod) == parseInt(tiles[i][2]) - 1)) {
                         tiles[i][0] = colors[robot[activeRobot].color];
+                        $scope.score += 2;
+                        $scope.userMoves.push("Color Up");
+                        if (checkGoal()) {
+                            //TODO:win
+                            alert("you win");
+                            $scope.win = true;
+
+
+                        }
+
                     }
                 }
-                $scope.userMoves.push("Color Up");
-
-                if (checkGoal()) {
-                    //TODO:win
-                    alert("you win");
-                    $scope.win = true;
 
 
-                }
             }
             if (67 in keysDown) {
                 console.log("c");
@@ -354,6 +358,7 @@ app.controller("trainCtrl", ["$scope", "$rootScope", '$timeout',
             $rootScope.user["UserMoves"] = $scope.userMoves;
             $rootScope.user["Score"] = $scope.score;
             $rootScope.user["Win"] = $scope.win;
+            $rootScope.user["GridSize"] = GridSize;
 
             $rootScope.UserStates = states;
             $scope.changeRoute('#/exp');

@@ -1,0 +1,61 @@
+p {
+    /*font-size: 0.75rem;*/
+    font-family: "Roboto", Arial, sans-serif;
+    color: #555;
+    line-height: 1.1;
+    letter-spacing: 0.8px;
+    font-weight: 300;
+    margin-top: 15px;
+
+}
+
+h1 {
+    font-size: 4.5rem;
+    color: #444;
+    margin-bottom: 0;
+    line-height: 1.1;
+    font-family: "Rosalind Serif", Georgia, serif;
+    letter-spacing: -1px;
+
+}
+
+h2 {
+    font-size: 3.5rem;
+    color: #444;
+    margin-bottom: 0;
+    line-height: 1.1;
+    font-family: "Rosalind Serif", Georgia, serif;
+    letter-spacing: -1px;
+
+}
+
+h3 {
+    font-size: 2.5rem;
+    color: #444;
+    margin-bottom: 0;
+    line-height: 1.1;
+    font-family: "Rosalind Serif", Georgia, serif;
+    letter-spacing: -1px;
+
+}
+
+h5 {
+    font-size: 1.8rem;
+    color: #444;
+    margin-bottom: 0;
+    line-height: 1.1;
+    font-family: "Rosalind Serif", Georgia, serif;
+    letter-spacing: -1px;
+
+}
+
+label {
+    /*font-size: 1.75rem;*/
+    font-family: "Roboto", Arial, sans-serif;
+    color: #555;
+    line-height: 1.1;
+    letter-spacing: 0.8px;
+    font-weight: 300;
+    margin-top: 15px;
+
+}

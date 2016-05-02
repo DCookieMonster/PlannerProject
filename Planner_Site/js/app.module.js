@@ -25,7 +25,11 @@ app.config(['$routeProvider', '$locationProvider',
         }).when('/end', {
             templateUrl: 'parcitals/end.html',
             controller: 'endCtrl'
+        }).when('/consent', {
+            templateUrl: 'parcitals/consent.html',
+            controller: 'consentCtrl'
         }).otherwise({
             redirectTo: '/'
+
         });
     }]);
